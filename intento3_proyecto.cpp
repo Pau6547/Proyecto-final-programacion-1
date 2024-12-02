@@ -69,7 +69,8 @@ void generarScriptGnuplot(float punto[MAX_DATOS][2], HazardType hazard[MAX_DATOS
         // Crear una grafica con tres tipos de puntos (segun la peligrosidad y el nuevo punto)
         fprintf(script, "plot '-' using 1:2 with points pt 7 lc rgb 'green' title 'Potentially Hazardous',\\\n");
         fprintf(script, "     '-' using 1:2 with points pt 7 lc rgb 'blue' title 'Not Hazardous',\\\n");
-        fprintf(script, "     '-' using 1:2 with points pt 2 lc rgb 'red' title 'Nuevo Punto'\n");
+        fprintf(script, "     '-' using 1:2 with points pt 2 lc rgb 'red' title 'Nuevo Punto',\\\n");
+        fprintf(script, "     '-' using 1:2 with points pt 1 lc rgb 'black' title 'Clasificacion'\n");
 
         // Escribir los datos "Potentially Hazardous"
         for (int i = 0; i < numDatos; i++) {
@@ -90,6 +91,12 @@ void generarScriptGnuplot(float punto[MAX_DATOS][2], HazardType hazard[MAX_DATOS
         // Escribir el nuevo punto
         fprintf(script, "%f %f\n", nuevoPunto[0], nuevoPunto[1]);
         fprintf(script, "e\n");  // Fin de los datos para 'Nuevo Punto'
+
+        // Escribir la clasificacion de los puntos
+        for (int i = 0; i < numDatos; i++) {
+            fprintf(script, "%f %d\n", punto[i][0], hazard[i]);
+        }
+        fprintf(script, "e\n");  // Fin de los datos para 'Clasificacion'
 
         fclose(script);
         printf("Script de Gnuplot generado: %s\n", scriptGnuplot);
@@ -113,7 +120,7 @@ int main() {
     // Crear un array regular en lugar de un array temporal
     float nuevoPunto[2] = {0.0, 0.0}; // Array regular
     // Suponiendo que el nuevo punto es "No Peligroso"
-    HazardType nuevoHazard = NOT_HAZARDOUS; // No es necesario determinar la peligrosidad aquí
+    HazardType nuevoHazard = NOT_HAZARDOUS; // No es necesario determinar la peligrosidad aquÃ­
 
     // Generar el script de Gnuplot con los datos cargados
     generarScriptGnuplot(punto, hazard, numDatos, scriptGnuplot, nuevoPunto, nuevoHazard);
@@ -134,7 +141,7 @@ int main() {
         printf("Ingresa la escala maxima Palermo: ");
         scanf("%f", &nuevoPunto[1]);
 
-        // Generar el nuevo script de Gnuplot con el nuevo punto (sin determinar su peligrosidad aquí)
+        // Generar el nuevo script de Gnuplot con el nuevo punto (sin determinar su peligrosidad aquÃ­)
         generarScriptGnuplot(punto, hazard, numDatos, scriptGnuplot, nuevoPunto, nuevoHazard);
 
         // Ejecutar Gnuplot para mostrar la grafica actualizada
@@ -150,4 +157,3 @@ int main() {
     
     return 0;
 }
-
